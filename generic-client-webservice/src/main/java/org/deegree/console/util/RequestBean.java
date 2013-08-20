@@ -320,7 +320,7 @@ public class RequestBean implements Serializable {
                 }
             }
         }
-        this.setWorkspaceService("deegree-csw");
+        this.setWorkspaceService("generic-client-workspace");
         
         loadExample();
     }
@@ -468,7 +468,7 @@ public class RequestBean implements Serializable {
 
        
         //File wsBaseDir = OGCFrontController.getServiceWorkspace().getLocation();
-        File wsBaseDir = new File( System.getProperty( "user.home" ) + separator + ".deegree/deegree-csw");
+        File wsBaseDir = new File( System.getProperty( "user.home" ) + separator + ".deegree/generic-client-workspace");
         requestsBaseDir = new File( wsBaseDir, "manager/requests" );
         if ( !requestsBaseDir.exists() ) {
             String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath( "/requests" );

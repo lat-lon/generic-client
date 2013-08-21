@@ -71,15 +71,6 @@
                             <f:validator validatorId="org.deegree.URLValidator" />
                         </h:inputText>
                         
-                        <!--h:outputLabel value="URL: #{requestBean.endpoint}/" for="workspaceService" /-->
-                        
-                        <!--h:selectOneMenu id="workspaceService"
-                                         value="#{requestBean.workspaceService}"
-                                         style="margin-right: 20px;">
-                            <f:selectItems value="#{requestBean.workspaceServices}"
-                                           var="workspaceService" itemLabel="#{workspaceService}"
-                                           itemValue="#{workspaceService}" />
-                        </h:selectOneMenu-->
 
                         <h:commandButton id="sendBt" value="send"
                                          action="#{requestBean.sendRequest}" style="text-align: right;">

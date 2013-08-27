@@ -33,43 +33,25 @@
     <url-pattern>*.xhtml</url-pattern>
   </servlet-mapping>
 
-  <servlet>
-    <servlet-name>services</servlet-name>
-    <servlet-class>org.deegree.services.controller.OGCFrontController</servlet-class>
+  <!--servlet>
+    <servlet-name>config</servlet-name>
+    <servlet-class>org.deegree.services.config.servlet.ConfigServlet</servlet-class>
     <load-on-startup>2</load-on-startup>
-  </servlet>
+  </servlet-->
 
+  <!--servlet-mapping>
+    <servlet-name>resources</servlet-name>
+    <url-pattern>/resources/*</url-pattern>
+  </servlet-mapping>
   <servlet>
     <servlet-name>resources</servlet-name>
     <servlet-class>org.deegree.services.resources.ResourcesServlet</servlet-class>
     <load-on-startup>2</load-on-startup>
   </servlet>
-
-  <servlet>
-    <servlet-name>config</servlet-name>
-    <servlet-class>org.deegree.services.config.servlet.ConfigServlet</servlet-class>
-    <load-on-startup>2</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>services</servlet-name>
-    <url-pattern>/services</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>services</servlet-name>
-    <url-pattern>/services/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>resources</servlet-name>
-    <url-pattern>/resources/*</url-pattern>
-  </servlet-mapping>
-
   <servlet-mapping>
     <servlet-name>config</servlet-name>
     <url-pattern>/config/*</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping-->
 
   <welcome-file-list>
     <welcome-file>client.xhtml</welcome-file>

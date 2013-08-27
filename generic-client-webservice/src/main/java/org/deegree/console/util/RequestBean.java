@@ -128,10 +128,11 @@ public class RequestBean implements Serializable {
     // --------REQUEST
     private TreeMap<String, Map<String, Map<String, List<String>>>> allRequests = new TreeMap<String, Map<String, Map<String, List<String>>>>();
     private String responseFile;
-    private String workspaceService = "";
     private String targetUrl;
     // file name that stores active workspaces (per webapp)
-    private static final String ACTIVE_WS_CONFIG_FILE = "webapps.properties";
+    private final String ACTIVE_WS_CONFIG_FILE = "webapps.properties";
+    // default workspace dir for request maps
+    private final String DEFAULT_REQUEST_MAP_DIR = "generic-client-webservice";
 
 
     public File getRequestsBaseDir() {
@@ -419,7 +420,9 @@ public class RequestBean implements Serializable {
                     IOUtils.closeQuietly(reader);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                FacesMessage fm = new FacesMessage(e.getMessage());
+                fm.setSeverity(FacesMessage.SEVERITY_ERROR);
+                FacesContext.getCurrentInstance().addMessage(null, fm);
             } finally {
                 IOUtils.closeQuietly(is);
             }
@@ -474,10 +477,13 @@ public class RequestBean implements Serializable {
         String wsName = props.getProperty("generic-client");
 
         File wsBaseDir = new File(wsRoot + separator + wsName);
+        if ( wsName == null ) {
+            wsBaseDir = new File(wsRoot + separator + DEFAULT_REQUEST_MAP_DIR);
+        }
         LOG.info("using '" + wsBaseDir + "' for request maps");
 
         requestsBaseDir = new File(wsBaseDir, "manager/requests");
-        if (!requestsBaseDir.exists()) {
+        if ( ! requestsBaseDir.exists() ) {
             String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/requests");
             requestsBaseDir = new File(realPath);
         }

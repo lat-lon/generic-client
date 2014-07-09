@@ -4,8 +4,9 @@
 *.jar
 *.war
 *.ear
-/target/
+/target
 /generic-client-workspace/target/
 /generic-client-webservice/target/
-/.settings
-/.project
+.settings
+.project
+.classpath

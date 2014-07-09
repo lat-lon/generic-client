@@ -333,13 +333,15 @@ public class RequestBean implements Serializable {
         String targetUrl = getTargetUrl();
         LOG.debug("Try to send the following request to " + targetUrl + " : \n" + request);
         if (targetUrl != null && targetUrl.length() > 0 && request != null && request.length() > 0) {
-            InputStream is = new ByteArrayInputStream(request.getBytes("UTF-8"));
+            byte[] bytes = request.getBytes("UTF-8");
+			InputStream is = new ByteArrayInputStream(bytes);
             try {
                 DURL u = new DURL(targetUrl);
                 DefaultHttpClient client = enableProxyUsage(new DefaultHttpClient(), u);
                 HttpPost post = new HttpPost(targetUrl);
                 post.setHeader("Content-Type", "text/xml;charset=UTF-8");
-                post.setEntity(new InputStreamEntity(is, -1));
+                InputStreamEntity entity = new InputStreamEntity(is, bytes.length);
+				post.setEntity(entity);
                 HttpResponse response = client.execute(post);
                 Header[] headers = response.getHeaders("Content-Type");
                 if (headers.length > 0) {

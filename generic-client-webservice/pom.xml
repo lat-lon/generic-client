@@ -14,10 +14,11 @@
   </parent>
 
   <dependencies>
-    <!--dependency>
+    <dependency>
       <groupId>org.deegree</groupId>
-      <artifactId>deegree-services-config</artifactId>
-    </dependency-->
+      <artifactId>deegree-jsf-console</artifactId>
+      <version>${deegree.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.deegree</groupId>
       <artifactId>deegree-jsf-core</artifactId>

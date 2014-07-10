@@ -15,6 +15,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <deegree.version>3.3.1</deegree.version>
   </properties>
 
   <build>
@@ -28,7 +29,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId> 
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.3.2</version>
+          <version>3.1</version>
           <configuration>
             <source>1.6</source>
             <target>1.6</target>
@@ -42,8 +43,33 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>2.1.1</version>
+          <version>2.3</version>
         </plugin>
+          <plugin>
+              <groupId>org.apache.tomcat.maven</groupId>
+              <artifactId>tomcat6-maven-plugin</artifactId>
+              <version>2.2</version>
+              <!-- http://tomcat.apache.org/maven-plugin-2.2/ -->
+              <executions>
+                  <execution>
+                      <id>tomcat-run</id>
+                      <goals>
+                          <goal>run-war-only</goal>
+                      </goals>
+                      <phase>pre-integration-test</phase>
+                      <configuration>
+                          <fork>true</fork>
+                      </configuration>
+                  </execution>
+                  <execution>
+                      <id>tomcat-shutdown</id>
+                      <goals>
+                          <goal>shutdown</goal>
+                      </goals>
+                      <phase>post-integration-test</phase>
+                  </execution>
+              </executions>
+          </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -53,12 +79,12 @@
       <dependency>
         <groupId>org.deegree</groupId>
         <artifactId>deegree-services-config</artifactId>
-        <version>3.3.1</version>
+        <version>${deegree.version}</version>
       </dependency>
       <dependency>
         <groupId>org.deegree</groupId>
         <artifactId>deegree-jsf-core</artifactId>
-        <version>3.3.1</version>
+        <version>${deegree.version}</version>
       </dependency>
       <dependency>
         <groupId>javax.servlet</groupId>

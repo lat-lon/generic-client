@@ -96,9 +96,9 @@
   </dependencyManagement>
   
   <scm>
-    <connection>scm:git:git://github.com/lat-lon/generic-client.git</connection>
-    <developerConnection>scm:git:git://github.com/lat-lon/generic-client.git</developerConnection>
-    <url>https://github.com/lat-lon/generic-client.git</url>
+    <connection>scm:git:git@github.com:lat-lon/generic-client.git</connection>
+    <developerConnection>scm:git:git@github.com:lat-lon/generic-client.git</developerConnection>
+    <url>https://github.com/lat-lon/generic-client</url>
   </scm>
 
   <repositories>

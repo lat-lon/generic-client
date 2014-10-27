@@ -587,6 +587,7 @@ public class RequestBean implements Serializable {
     // copy from org.deegree.commons.utils.net.HttpUtils.enableProxyUsage(DefaultHttpClient, DURL)
     private DefaultHttpClient createHttpClient( DURL url ) {
     	HttpParams params = new BasicHttpParams();
+    	LOG.info("Timeout: {}", timeoutInSeconds);
 		int timeoutInMs = timeoutInSeconds * 1000;
 		HttpConnectionParams.setConnectionTimeout(params, timeoutInMs);
 		HttpConnectionParams.setSoTimeout(params, 0);

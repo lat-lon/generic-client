@@ -74,7 +74,9 @@
                     </h:column>
                     <h:column>
                         <h:outputText value="Timeout (in seconds): " />
-                    	<h:inputText id="timeout" value="#{requestBean.timeoutInSeconds}" title="Timeout in seconds, a value of 0 means 'infinite'">
+                    	<h:inputText id="timeout" value="#{requestBean.timeoutInSeconds}" title="Timeout in seconds, a value of 0 means 'infinite'"
+                    	   validatorMessage="Please correct the timeout: a positive integer (0 inclusive) is expected!" 
+                    	   converterMessage="Please correct the timeout: a positive integer (0 inclusive) is expected!">
                     	  <f:convertNumber integerOnly="true" />
                     	  <f:validateLongRange minimum="0" />
                     	</h:inputText>
@@ -88,7 +90,7 @@
 
                         <h:commandButton id="sendBt" value="send"
                                          action="#{requestBean.sendRequest}" style="text-align: right;">
-                            <f:ajax execute="url requestArea"
+                            <f:ajax execute="url requestArea timeout"
                                     render="sendMgs result downloadLink" onevent="blockInput" />
                         </h:commandButton>
 

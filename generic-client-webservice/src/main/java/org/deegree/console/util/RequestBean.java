@@ -74,12 +74,10 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
-import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HttpContext;
 import org.deegree.client.core.utils.MessageUtils;
 import org.deegree.commons.utils.net.DURL;
 import org.deegree.commons.xml.XMLAdapter;
@@ -101,7 +99,6 @@ public class RequestBean implements Serializable {
 
     private static final long serialVersionUID = 293894352421399345L;
     private static final Logger LOG = getLogger(RequestBean.class);
-	protected static final long DEFAULT_SOCKET_TIMEOUT = 10000;
     private File requestsBaseDir;
     private String selectedService;
     private String selectedReqProfile;
@@ -593,16 +590,6 @@ public class RequestBean implements Serializable {
 		HttpConnectionParams.setConnectionTimeout(params, timeout);
 		HttpConnectionParams.setSoTimeout(params, 0);
 		DefaultHttpClient client = new DefaultHttpClient(params);
-        client.setKeepAliveStrategy( new DefaultConnectionKeepAliveStrategy() {
-            @Override
-            public long getKeepAliveDuration( HttpResponse response, HttpContext context ) {
-                long keepAlive = super.getKeepAliveDuration( response, context );
-                if ( keepAlive == -1 ) {
-                    keepAlive = DEFAULT_SOCKET_TIMEOUT;
-                }
-                return keepAlive;
-            }
-        } );
         String host = url.getURL().getHost();
         String protocol = url.getURL().getProtocol().toLowerCase();
         handleProxies( protocol, client, host );

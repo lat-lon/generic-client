@@ -37,8 +37,9 @@ package org.deegree.console.util;
 
 import static java.io.File.separator;
 import static java.util.Collections.sort;
-import static org.deegree.commons.utils.net.HttpUtils.enableProxyUsage;
+import static org.deegree.commons.utils.net.HttpUtils.handleProxies;
 import static org.slf4j.LoggerFactory.getLogger;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -63,7 +64,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
@@ -75,6 +75,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.deegree.client.core.utils.MessageUtils;
 import org.deegree.commons.utils.net.DURL;
 import org.deegree.commons.xml.XMLAdapter;
@@ -116,6 +119,7 @@ public class RequestBean implements Serializable {
     private TreeMap<String, Map<String, Map<String, List<String>>>> allRequests = new TreeMap<String, Map<String, Map<String, List<String>>>>();
     private String responseFile;
     private String targetUrl;
+	private int timeoutInSeconds = 30;
     // file name that stores active workspaces (per webapp)
     private final String ACTIVE_WS_CONFIG_FILE = "webapps.properties";
     // default workspace dir for request maps
@@ -337,7 +341,7 @@ public class RequestBean implements Serializable {
 			InputStream is = new ByteArrayInputStream(bytes);
             try {
                 DURL u = new DURL(targetUrl);
-                DefaultHttpClient client = enableProxyUsage(new DefaultHttpClient(), u);
+				DefaultHttpClient client = createHttpClient( u);
                 HttpPost post = new HttpPost(targetUrl);
                 post.setHeader("Content-Type", "text/xml;charset=UTF-8");
                 InputStreamEntity entity = new InputStreamEntity(is, bytes.length);
@@ -409,6 +413,14 @@ public class RequestBean implements Serializable {
         loadExample();
         return request;
     }
+
+	public int getTimeoutInSeconds() {
+		return timeoutInSeconds;
+	}
+
+	public void setTimeoutInSeconds(int timeoutInSeconds) {
+		this.timeoutInSeconds = timeoutInSeconds;
+	}
 
     private static Properties loadWebappToWsMappings(File file) {
 
@@ -572,6 +584,19 @@ public class RequestBean implements Serializable {
         }
     }
 
+    // copy from org.deegree.commons.utils.net.HttpUtils.enableProxyUsage(DefaultHttpClient, DURL)
+    private DefaultHttpClient createHttpClient( DURL url ) {
+    	HttpParams params = new BasicHttpParams();
+    	LOG.debug("Timeout: {}", timeoutInSeconds);
+		int timeoutInMs = timeoutInSeconds * 1000;
+		HttpConnectionParams.setConnectionTimeout(params, timeoutInMs);
+		HttpConnectionParams.setSoTimeout(params, 0);
+		DefaultHttpClient client = new DefaultHttpClient(params);
+        String host = url.getURL().getHost();
+        String protocol = url.getURL().getProtocol().toLowerCase();
+        handleProxies( protocol, client, host );
+        return client;
+    }
 
     public String getDlparams()
             throws UnsupportedEncodingException {

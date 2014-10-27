@@ -182,3 +182,9 @@ a {
 	border-width: 0 1px;
 }
 /* End: styles for "Please wait" */
+
+/* Begin: Styles for error messages */
+.errorMsg {
+    color: red;
+}
+/* End: Styles for error messages */

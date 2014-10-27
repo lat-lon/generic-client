@@ -37,8 +37,9 @@ package org.deegree.console.util;
 
 import static java.io.File.separator;
 import static java.util.Collections.sort;
-import static org.deegree.commons.utils.net.HttpUtils.enableProxyUsage;
+import static org.deegree.commons.utils.net.HttpUtils.handleProxies;
 import static org.slf4j.LoggerFactory.getLogger;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -63,7 +64,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
@@ -74,7 +74,12 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HttpContext;
 import org.deegree.client.core.utils.MessageUtils;
 import org.deegree.commons.utils.net.DURL;
 import org.deegree.commons.xml.XMLAdapter;
@@ -96,6 +101,7 @@ public class RequestBean implements Serializable {
 
     private static final long serialVersionUID = 293894352421399345L;
     private static final Logger LOG = getLogger(RequestBean.class);
+	protected static final long DEFAULT_SOCKET_TIMEOUT = 10000;
     private File requestsBaseDir;
     private String selectedService;
     private String selectedReqProfile;
@@ -116,6 +122,7 @@ public class RequestBean implements Serializable {
     private TreeMap<String, Map<String, Map<String, List<String>>>> allRequests = new TreeMap<String, Map<String, Map<String, List<String>>>>();
     private String responseFile;
     private String targetUrl;
+	private int timeout = 3000;
     // file name that stores active workspaces (per webapp)
     private final String ACTIVE_WS_CONFIG_FILE = "webapps.properties";
     // default workspace dir for request maps
@@ -337,7 +344,7 @@ public class RequestBean implements Serializable {
 			InputStream is = new ByteArrayInputStream(bytes);
             try {
                 DURL u = new DURL(targetUrl);
-                DefaultHttpClient client = enableProxyUsage(new DefaultHttpClient(), u);
+				DefaultHttpClient client = createHttpClient( u);
                 HttpPost post = new HttpPost(targetUrl);
                 post.setHeader("Content-Type", "text/xml;charset=UTF-8");
                 InputStreamEntity entity = new InputStreamEntity(is, bytes.length);
@@ -572,6 +579,27 @@ public class RequestBean implements Serializable {
         }
     }
 
+    // copy from org.deegree.commons.utils.net.HttpUtils.enableProxyUsage(DefaultHttpClient, DURL)
+    private DefaultHttpClient createHttpClient( DURL url ) {
+    	HttpParams params = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(params, timeout);
+		HttpConnectionParams.setSoTimeout(params, 0);
+		DefaultHttpClient client = new DefaultHttpClient(params);
+        client.setKeepAliveStrategy( new DefaultConnectionKeepAliveStrategy() {
+            @Override
+            public long getKeepAliveDuration( HttpResponse response, HttpContext context ) {
+                long keepAlive = super.getKeepAliveDuration( response, context );
+                if ( keepAlive == -1 ) {
+                    keepAlive = DEFAULT_SOCKET_TIMEOUT;
+                }
+                return keepAlive;
+            }
+        } );
+        String host = url.getURL().getHost();
+        String protocol = url.getURL().getProtocol().toLowerCase();
+        handleProxies( protocol, client, host );
+        return client;
+    }
 
     public String getDlparams()
             throws UnsupportedEncodingException {

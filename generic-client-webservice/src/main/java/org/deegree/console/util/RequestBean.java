@@ -119,7 +119,7 @@ public class RequestBean implements Serializable {
     private TreeMap<String, Map<String, Map<String, List<String>>>> allRequests = new TreeMap<String, Map<String, Map<String, List<String>>>>();
     private String responseFile;
     private String targetUrl;
-	private int timeout = 3000;
+	private int timeoutInSeconds = 30;
     // file name that stores active workspaces (per webapp)
     private final String ACTIVE_WS_CONFIG_FILE = "webapps.properties";
     // default workspace dir for request maps
@@ -414,12 +414,12 @@ public class RequestBean implements Serializable {
         return request;
     }
 
-	public int getTimeout() {
-		return timeout;
+	public int getTimeoutInSeconds() {
+		return timeoutInSeconds;
 	}
 
-	public void setTimeout(int timeout) {
-		this.timeout = timeout;
+	public void setTimeoutInSeconds(int timeoutInSeconds) {
+		this.timeoutInSeconds = timeoutInSeconds;
 	}
 
     private static Properties loadWebappToWsMappings(File file) {
@@ -587,7 +587,8 @@ public class RequestBean implements Serializable {
     // copy from org.deegree.commons.utils.net.HttpUtils.enableProxyUsage(DefaultHttpClient, DURL)
     private DefaultHttpClient createHttpClient( DURL url ) {
     	HttpParams params = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(params, timeout);
+		int timeoutInMs = timeoutInSeconds * 1000;
+		HttpConnectionParams.setConnectionTimeout(params, timeoutInMs);
 		HttpConnectionParams.setSoTimeout(params, 0);
 		DefaultHttpClient client = new DefaultHttpClient(params);
         String host = url.getURL().getHost();

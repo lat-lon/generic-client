@@ -417,6 +417,14 @@ public class RequestBean implements Serializable {
         return request;
     }
 
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+
     private static Properties loadWebappToWsMappings(File file) {
 
         Properties props = new Properties();

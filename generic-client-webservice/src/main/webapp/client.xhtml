@@ -73,8 +73,8 @@
                                          styleClass="textarea" />
                     </h:column>
                     <h:column>
-                        <h:outputText value="Timeout (in Sekunden): " />
-                    	<h:inputText id="timeout" value="#{requestBean.timeoutInSeconds}" title="Timeout in Sekunden, Angabe von 0 entspricht 'unendlich'">
+                        <h:outputText value="Timeout (in seconds): " />
+                    	<h:inputText id="timeout" value="#{requestBean.timeoutInSeconds}" title="Timeout in seconds, a value of 0 means 'infinite'">
                     	  <f:convertNumber integerOnly="true" />
                     	  <f:validateLongRange minimum="0" />
                     	</h:inputText>

@@ -587,10 +587,10 @@ public class RequestBean implements Serializable {
     // copy from org.deegree.commons.utils.net.HttpUtils.enableProxyUsage(DefaultHttpClient, DURL)
     private DefaultHttpClient createHttpClient( DURL url ) {
     	HttpParams params = new BasicHttpParams();
-    	LOG.debug("Timeout: {}", timeoutInSeconds);
 		int timeoutInMs = timeoutInSeconds * 1000;
+    	LOG.debug("Timeout [ms]: {}", timeoutInMs);
 		HttpConnectionParams.setConnectionTimeout(params, timeoutInMs);
-		HttpConnectionParams.setSoTimeout(params, 0);
+		HttpConnectionParams.setSoTimeout(params, timeoutInMs);
 		DefaultHttpClient client = new DefaultHttpClient(params);
         String host = url.getURL().getHost();
         String protocol = url.getURL().getProtocol().toLowerCase();

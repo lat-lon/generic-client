@@ -3,7 +3,7 @@
 
   <groupId>org.deegree</groupId>
   <artifactId>generic-client</artifactId>
-  <version>1.3-SNAPSHOT</version>
+  <version>1.3</version>
   <packaging>pom</packaging>
 
   <name>generic-client</name>

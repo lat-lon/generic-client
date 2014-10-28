@@ -590,7 +590,7 @@ public class RequestBean implements Serializable {
 		int timeoutInMs = timeoutInSeconds * 1000;
     	LOG.debug("Timeout [ms]: {}", timeoutInMs);
 		HttpConnectionParams.setConnectionTimeout(params, timeoutInMs);
-		HttpConnectionParams.setSoTimeout(params, timeoutInMs/1000);
+		HttpConnectionParams.setSoTimeout(params, timeoutInMs);
 		DefaultHttpClient client = new DefaultHttpClient(params);
         String host = url.getURL().getHost();
         String protocol = url.getURL().getProtocol().toLowerCase();

@@ -23,6 +23,8 @@
 
   <!-- PhaseListener -->
   <lifecycle>
+    <!-- http://stackoverflow.com/questions/6642242/how-can-i-populate-a-text-field-using-primefaces-ajax-after-validation-errors-oc/6845800#6845800 -->      
+    <phase-listener>org.omnifaces.eventlistener.ResetInputAjaxActionListener</phase-listener>
     <phase-listener>org.deegree.client.core.debug.DebugPhaseListener</phase-listener>
     <phase-listener>org.deegree.client.core.debug.ParameterPhaseListener</phase-listener>
   </lifecycle>
